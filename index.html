@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Логарифмы и Степени | Школа Prepolyanski</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-from: #0f0c29;
+      --bg-mid:  #302b63;
+      --bg-to:   #24243e;
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.18);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.37);
+      --blur: blur(22px);
+      --accent: #a78bfa;
+      --accent2: #60a5fa;
+      --accent3: #f472b6;
+      --text: rgba(255,255,255,0.92);
+      --text-muted: rgba(255,255,255,0.55);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --radius-xs: 10px;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, var(--bg-from) 0%, var(--bg-mid) 50%, var(--bg-to) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: blobDrift 18s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 520px; height: 520px; background: #7c3aed; top: -120px; left: -100px; animation-delay: 0s; }
+    .blob-2 { width: 400px; height: 400px; background: #2563eb; top: 40%; right: -120px; animation-delay: -6s; }
+    .blob-3 { width: 350px; height: 350px; background: #db2777; bottom: 5%; left: 15%; animation-delay: -12s; }
+    @keyframes blobDrift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.08); }
+    }
+
+    /* ── Glass utility ── */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    /* ── Layout ── */
+    .page-wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* ── HEADER / LOGO ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 28px;
+      margin: 0 -20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15,12,41,0.55);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #3b82f6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(124,58,237,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 24px; height: 24px; }
+    .logo-text { line-height: 1.1; }
+    .logo-school { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .logo-name { font-size: 1.05rem; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+
+    nav { display: flex; gap: 6px; flex-wrap: wrap; }
+    nav a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      transition: all 0.2s;
+    }
+    nav a:hover { color: #fff; background: rgba(255,255,255,0.12); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 56px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(167,139,250,0.12);
+      border: 1px solid rgba(167,139,250,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      background: linear-gradient(135deg, #fff 30%, #a78bfa 65%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* ── TOC pill-tabs ── */
+    .toc-wrap {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 auto 48px;
+    }
+    .toc-wrap a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .toc-wrap a:hover { background: rgba(167,139,250,0.22); border-color: rgba(167,139,250,0.45); color: #fff; }
+
+    /* ── Section card ── */
+    .section-card {
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 60%);
+      pointer-events: none;
+    }
+    @media (max-width: 600px) { .section-card { padding: 24px 20px; } }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .num-purple { background: rgba(167,139,250,0.2); color: var(--accent); border: 1px solid rgba(167,139,250,0.35); }
+    .num-blue   { background: rgba(96,165,250,0.2);  color: var(--accent2); border: 1px solid rgba(96,165,250,0.35); }
+    .num-pink   { background: rgba(244,114,182,0.2); color: var(--accent3); border: 1px solid rgba(244,114,182,0.35); }
+    .num-green  { background: rgba(52,211,153,0.2);  color: #34d399; border: 1px solid rgba(52,211,153,0.35); }
+    .num-orange { background: rgba(251,146,60,0.2);  color: #fb923c; border: 1px solid rgba(251,146,60,0.35); }
+
+    .section-card h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .section-card h3 {
+      font-size: 1.1rem;
+      font-weight: 650;
+      color: rgba(255,255,255,0.88);
+      margin: 26px 0 12px;
+    }
+    .section-card p, .section-card li {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.78);
+    }
+    .section-card ul, .section-card ol { padding-left: 22px; }
+    .section-card li { margin-bottom: 6px; }
+
+    /* ── Formula boxes ── */
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .formula-box {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--radius-xs);
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.85);
+    }
+    .formula-box .label {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .formula-box.accent-purple { border-color: rgba(167,139,250,0.3); }
+    .formula-box.accent-blue   { border-color: rgba(96,165,250,0.3); }
+    .formula-box.accent-pink   { border-color: rgba(244,114,182,0.3); }
+
+    /* ── Definition highlight ── */
+    .def-box {
+      background: rgba(167,139,250,0.1);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+    }
+    .def-box.blue  { background: rgba(96,165,250,0.1); border-left-color: var(--accent2); }
+    .def-box.pink  { background: rgba(244,114,182,0.1); border-left-color: var(--accent3); }
+    .def-box.green { background: rgba(52,211,153,0.1); border-left-color: #34d399; }
+
+    /* ── Alert / Note ── */
+    .note {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: rgba(251,146,60,0.1);
+      border: 1px solid rgba(251,146,60,0.25);
+      border-radius: var(--radius-xs);
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.6;
+    }
+    .note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Example box ── */
+    .example-box {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      margin: 16px 0;
+    }
+    .example-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .example-box p, .example-box li { font-size: 0.88rem; }
+
+    /* ── Steps ── */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700; color: #fff;
+    }
+    .step-body { font-size: 0.9rem; line-height: 1.65; color: rgba(255,255,255,0.80); padding-top: 3px; }
+
+    /* ── Table ── */
+    .glass-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.88rem; }
+    .glass-table th, .glass-table td {
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      text-align: center;
+      color: rgba(255,255,255,0.82);
+    }
+    .glass-table th {
+      background: rgba(167,139,250,0.15);
+      font-weight: 600;
+      color: #fff;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+    }
+    .glass-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+    /* ── Divider ── */
+    .divider { border: none; height: 1px; background: rgba(255,255,255,0.08); margin: 10px 0 26px; }
+
+    /* ── Back to top ── */
+    #top-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: rgba(167,139,250,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.5);
+      transition: all 0.2s;
+      z-index: 200;
+      text-decoration: none;
+    }
+    #top-btn:hover { transform: translateY(-2px); background: rgba(167,139,250,1); }
+
+    /* ── Sources ── */
+    .sources-list { list-style: none; padding: 0; }
+    .sources-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .sources-list li:last-child { border-bottom: none; }
+    .src-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .sources-list a { color: var(--accent2); font-size: 0.88rem; text-decoration: none; }
+    .sources-list a:hover { text-decoration: underline; }
+
+    /* ── Footer ── */
+    footer { text-align: center; padding: 32px 0 0; color: var(--text-muted); font-size: 0.8rem; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<!-- Animated blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 20 L8 4 L12 14 L16 8 L20 20" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <div class="logo-school">Школа</div>
+      <div class="logo-name">Prepolyanski</div>
+    </div>
+  </a>
+  <nav>
+    <a href="#degrees">Степени</a>
+    <a href="#logarithms">Логарифмы</a>
+    <a href="#equations">Уравнения</a>
+    <a href="#inequalities">Неравенства</a>
+  </nav>
+</header>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">ЕГЭ · Профильная математика</div>
+    <h1>Логарифмы&nbsp;&amp;<br>Показательные функции</h1>
+    <p>Полная теория, свойства и методы решения задания&nbsp;13 — от основ до нестандартных приёмов</p>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc-wrap">
+    <a href="#degrees">📐 Степени</a>
+    <a href="#exp-func">📈 Показательная функция</a>
+    <a href="#logarithms">🔢 Логарифмы</a>
+    <a href="#log-props">⚙️ Свойства логарифмов</a>
+    <a href="#equations">🟰 Уравнения</a>
+    <a href="#inequalities">≥ Неравенства</a>
+    <a href="#tips">💡 Советы ЕГЭ</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 1 — СТЕПЕНИ
+  ═══════════════════════════════════════════ -->
+  <div id="degrees" class="section-card glass">
+    <div class="section-number num-purple">01</div>
+    <h2>Степени и их свойства</h2>
+
+    <div class="def-box">
+      <strong>Определение.</strong> Степень числа $a$ с натуральным показателем $n$:
+      $$a^n = \underbrace{a \cdot a \cdots a}_{n \text{ раз}}, \quad a \in \mathbb{R},\; n \in \mathbb{N}$$
+    </div>
+
+    <h3>Основные свойства степеней</h3>
+    <p>Для любых $a, b > 0$ и $m, n \in \mathbb{R}$:</p>
+    <div class="formula-grid">
+      <div class="formula-box accent-purple"><span class="label">Произведение</span>$a^m \cdot a^n = a^{m+n}$</div>
+      <div class="formula-box accent-purple"><span class="label">Частное</span>$\dfrac{a^m}{a^n} = a^{m-n}$</div>
+      <div class="formula-box accent-purple"><span class="label">Степень степени</span>$(a^m)^n = a^{mn}$</div>
+      <div class="formula-box accent-blue"><span class="label">Степень произведения</span>$(ab)^n = a^n b^n$</div>
+      <div class="formula-box accent-blue"><span class="label">Нулевой показатель</span>$a^0 = 1,\; a \neq 0$</div>
+      <div class="formula-box accent-blue"><span class="label">Отрицательный</span>$a^{-n} = \dfrac{1}{a^n}$</div>
+      <div class="formula-box accent-pink"><span class="label">Дробный</span>$a^{m/n} = \sqrt[n]{a^m}$</div>
+      <div class="formula-box accent-pink"><span class="label">Корень</span>$\sqrt[n]{a} = a^{1/n}$</div>
+    </div>
+
+    <div class="note">
+      <span class="note-icon">⚠️</span>
+      <span>Свойство $a^m \cdot a^n = a^{m+n}$ работает только при <strong>одинаковом основании</strong>. Не путайте: $(2^3)^4 = 2^{12}$, но $2^3 \cdot 3^4 \neq 6^7$.</span>
+    </div>
+
+    <h3>Действия с корнями</h3>
+    <div class="formula-grid">
+      <div class="formula-box"><span class="label">Произведение</span>$\sqrt[n]{a}\cdot\sqrt[n]{b}=\sqrt[n]{ab}$</div>
+      <div class="formula-box"><span class="label">Частное</span>$\dfrac{\sqrt[n]{a}}{\sqrt[n]{b}}=\sqrt[n]{\dfrac{a}{b}}$</div>
+      <div class="formula-box"><span class="label">Степень корня</span>$(\sqrt[n]{a})^m=\sqrt[n]{a^m}$</div>
+      <div class="formula-box"><span class="label">Вложенный корень</span>$\sqrt[m]{\sqrt[n]{a}}=\sqrt[mn]{a}$</div>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — упрощение</div>
+      <p>Вычислить: $\dfrac{8^{2/3} \cdot 4^{-1/2}}{2^{-1}}$</p>
+      <p style="margin-top:8px;">$= \dfrac{(2^3)^{2/3} \cdot (2^2)^{-1/2}}{2^{-1}} = \dfrac{2^2 \cdot 2^{-1}}{2^{-1}} = \dfrac{2^1}{2^{-1}} = 2^{1-(-1)} = 2^2 = \mathbf{4}$</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 2 — ПОКАЗАТЕЛЬНАЯ ФУНКЦИЯ
+  ═══════════════════════════════════════════ -->
+  <div id="exp-func" class="section-card glass">
+    <div class="section-number num-blue">02</div>
+    <h2>Показательная функция</h2>
+
+    <div class="def-box blue">
+      <strong>Определение.</strong> $f(x) = a^x$, где $a > 0$, $a \neq 1$ — <em>показательная функция</em>.
+    </div>
+
+    <h3>Свойства показательной функции</h3>
+    <table class="glass-table">
+      <thead>
+        <tr><th>Свойство</th><th>$a > 1$</th><th>$0 < a < 1$</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Область определения</td><td colspan="2">$(-\infty;\, +\infty)$</td></tr>
+        <tr><td>Область значений</td><td colspan="2">$(0;\, +\infty)$</td></tr>
+        <tr><td>Монотонность</td><td>Возрастает</td><td>Убывает</td></tr>
+        <tr><td>При $x = 0$</td><td colspan="2">$f(0) = 1$</td></tr>
+        <tr><td>$x \to +\infty$</td><td>$f \to +\infty$</td><td>$f \to 0$</td></tr>
+        <tr><td>$x \to -\infty$</td><td>$f \to 0$</td><td>$f \to +\infty$</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <span class="note-icon">💡</span>
+      <span>График $y = a^x$ всегда проходит через точку $(0, 1)$ и не пересекает ось $Ox$. Горизонтальная асимптота: $y = 0$.</span>
+    </div>
+
+    <h3>Важные табличные значения</h3>
+    <table class="glass-table">
+      <thead><tr><th>$x$</th><th>$-3$</th><th>$-2$</th><th>$-1$</th><th>$0$</th><th>$1$</th><th>$2$</th><th>$3$</th></tr></thead>
+      <tbody>
+        <tr><td>$2^x$</td><td>$\tfrac{1}{8}$</td><td>$\tfrac{1}{4}$</td><td>$\tfrac{1}{2}$</td><td>$1$</td><td>$2$</td><td>$4$</td><td>$8$</td></tr>
+        <tr><td>$10^x$</td><td>$0{,}001$</td><td>$0{,}01$</td><td>$0{,}1$</td><td>$1$</td><td>$10$</td><td>$100$</td><td>$1000$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 3 — ЛОГАРИФМЫ
+  ═══════════════════════════════════════════ -->
+  <div id="logarithms" class="section-card glass">
+    <div class="section-number num-pink">03</div>
+    <h2>Логарифмы. Определение</h2>
+
+    <div class="def-box pink">
+      <strong>Основное определение.</strong><br>
+      $\log_a b = c \;\Longleftrightarrow\; a^c = b$,<br>
+      где $a > 0$, $a \neq 1$, $b > 0$.
+    </div>
+
+    <p>Логарифм числа $b$ по основанию $a$ — это <strong>показатель степени</strong>, в которую нужно возвести $a$, чтобы получить $b$.</p>
+
+    <div class="example-box">
+      <div class="example-label">Примеры вычисления</div>
+      <ul>
+        <li>$\log_2 8 = 3$, &nbsp;т.к. $2^3 = 8$</li>
+        <li>$\log_3 \tfrac{1}{9} = -2$, &nbsp;т.к. $3^{-2} = \tfrac{1}{9}$</li>
+        <li>$\log_5 1 = 0$, &nbsp;т.к. $5^0 = 1$</li>
+        <li>$\log_5 5 = 1$, &nbsp;т.к. $5^1 = 5$</li>
+        <li>$\log_{0{,}1} 0{,}001 = 3$, &nbsp;т.к. $(0{,}1)^3 = 0{,}001$</li>
+      </ul>
+    </div>
+
+    <h3>Частные случаи</h3>
+    <div class="formula-grid">
+      <div class="formula-box accent-pink"><span class="label">Единица</span>$\log_a 1 = 0$</div>
+      <div class="formula-box accent-pink"><span class="label">Основание</span>$\log_a a = 1$</div>
+      <div class="formula-box accent-pink"><span class="label">Основное тождество</span>$a^{\log_a b} = b$</div>
+      <div class="formula-box accent-blue"><span class="label">Натуральный логарифм</span>$\ln x = \log_e x$</div>
+      <div class="formula-box accent-blue"><span class="label">Десятичный логарифм</span>$\lg x = \log_{10} x$</div>
+    </div>
+
+    <div class="note">
+      <span class="note-icon">📌</span>
+      <span><strong>Область допустимых значений (ОДЗ):</strong> логарифм определён только при $b > 0$ и $a > 0$, $a \neq 1$. В ЕГЭ проверяйте ОДЗ в каждой задаче!</span>
+    </div>
+
+    <h3>Логарифмическая функция</h3>
+    <table class="glass-table">
+      <thead>
+        <tr><th>Свойство</th><th>$a > 1$</th><th>$0 < a < 1$</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Область определения</td><td colspan="2">$(0;\, +\infty)$</td></tr>
+        <tr><td>Область значений</td><td colspan="2">$(-\infty;\, +\infty)$</td></tr>
+        <tr><td>Монотонность</td><td>Возрастает</td><td>Убывает</td></tr>
+        <tr><td>$f(1)$</td><td colspan="2">$0$</td></tr>
+        <tr><td>Вертикальная асимптота</td><td colspan="2">$x = 0$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 4 — СВОЙСТВА ЛОГАРИФМОВ
+  ═══════════════════════════════════════════ -->
+  <div id="log-props" class="section-card glass">
+    <div class="section-number num-green">04</div>
+    <h2>Свойства логарифмов</h2>
+
+    <p>Все свойства действуют при условии: основания $> 0$, $\neq 1$; аргументы $> 0$.</p>
+
+    <h3>Основные формулы</h3>
+    <div class="formula-grid">
+      <div class="formula-box accent-purple">
+        <span class="label">Произведение</span>
+        $\log_a(mn) = \log_a m + \log_a n$
+      </div>
+      <div class="formula-box accent-purple">
+        <span class="label">Частное</span>
+        $\log_a\!\dfrac{m}{n} = \log_a m - \log_a n$
+      </div>
+      <div class="formula-box accent-blue">
+        <span class="label">Степень</span>
+        $\log_a m^k = k\log_a m$
+      </div>
+      <div class="formula-box accent-blue">
+        <span class="label">Корень</span>
+        $\log_a \sqrt[k]{m} = \dfrac{1}{k}\log_a m$
+      </div>
+      <div class="formula-box accent-pink">
+        <span class="label">Формула перехода</span>
+        $\log_a b = \dfrac{\log_c b}{\log_c a}$
+      </div>
+      <div class="formula-box accent-pink">
+        <span class="label">Частный случай</span>
+        $\log_a b = \dfrac{1}{\log_b a}$
+      </div>
+      <div class="formula-box accent-purple">
+        <span class="label">Степень основания</span>
+        $\log_{a^n} b = \dfrac{1}{n}\log_a b$
+      </div>
+      <div class="formula-box accent-purple">
+        <span class="label">Степень и аргумент</span>
+        $\log_{a^n} b^m = \dfrac{m}{n}\log_a b$
+      </div>
+    </div>
+
+    <h3>Формула перехода к основанию $e$ и 10</h3>
+    <div class="def-box">
+      $$\log_a b = \frac{\ln b}{\ln a} = \frac{\lg b}{\lg a}$$
+      Используется, когда нужно объединить логарифмы с разными основаниями.
+    </div>
+
+    <hr class="divider" />
+
+    <h3>Разбор типичных ошибок</h3>
+    <table class="glass-table">
+      <thead><tr><th>Неверно ❌</th><th>Верно ✅</th></tr></thead>
+      <tbody>
+        <tr><td>$\log_a(m + n) = \log_a m + \log_a n$</td><td>Нет такого свойства!</td></tr>
+        <tr><td>$\log_a m \cdot \log_a n = \log_a(mn)$</td><td>$\log_a(mn) = \log_a m + \log_a n$</td></tr>
+        <tr><td>$(\log_a m)^k = k\log_a m$</td><td>$\log_a m^k = k\log_a m$</td></tr>
+        <tr><td>$\log_a \dfrac{1}{b} = \log_a 1 - b$</td><td>$\log_a \dfrac{1}{b} = -\log_a b$</td></tr>
+      </tbody>
+    </table>
+
+    <div class="example-box">
+      <div class="example-label">Пример — вычисление выражения</div>
+      <p>Вычислить: $\log_6 4 + \log_6 9$</p>
+      <p style="margin-top:8px;">$= \log_6(4 \cdot 9) = \log_6 36 = \log_6 6^2 = 2$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — формула перехода</div>
+      <p>Упростить: $\log_4 8$</p>
+      <p style="margin-top:8px;">$\log_4 8 = \dfrac{\log_2 8}{\log_2 4} = \dfrac{3}{2}$</p>
+      <p style="margin-top:4px;">Или: $\log_4 8 = \log_{2^2}2^3 = \dfrac{3}{2}$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — замена основания</div>
+      <p>Вычислить: $3^{\log_9 5}$</p>
+      <p style="margin-top:8px;">$= 3^{\frac{\log_3 5}{\log_3 9}} = 3^{\frac{\log_3 5}{2}} = (3^{\log_3 5})^{1/2} = 5^{1/2} = \sqrt{5}$</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 5 — УРАВНЕНИЯ
+  ═══════════════════════════════════════════ -->
+  <div id="equations" class="section-card glass">
+    <div class="section-number num-orange">05</div>
+    <h2>Показательные и логарифмические уравнения</h2>
+
+    <!-- 5A -->
+    <h3>A. Показательные уравнения</h3>
+    <div class="def-box blue">
+      <strong>Основной метод:</strong> если $a^{f(x)} = a^{g(x)}$ и $a > 0$, $a \neq 1$, то $f(x) = g(x)$.
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Привести обе части к одному основанию.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Приравнять показатели.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Решить полученное уравнение.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">Проверить ОДЗ (в показательных уравнениях обычно нет ограничений на ОДЗ).</div></div>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 1 — одинаковое основание</div>
+      <p>$4^x = 32$</p>
+      <p>$(2^2)^x = 2^5 \;\Rightarrow\; 2x = 5 \;\Rightarrow\; x = 2{,}5$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 2 — замена переменной</div>
+      <p>$4^x - 3 \cdot 2^x - 4 = 0$</p>
+      <p>Замена: $t = 2^x > 0$: &nbsp; $t^2 - 3t - 4 = 0$</p>
+      <p>$(t-4)(t+1) = 0 \;\Rightarrow\; t = 4$ (т.к. $t > 0$)</p>
+      <p>$2^x = 4 = 2^2 \;\Rightarrow\; x = 2$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 3 — разные основания (логарифмирование)</div>
+      <p>$3^x = 7$</p>
+      <p>$x = \log_3 7 = \dfrac{\ln 7}{\ln 3}$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 4 — уравнение вида $a^{f(x)} = b^{f(x)}$</div>
+      <p>$5^{x^2-3} = 5^{2x}$</p>
+      <p>$x^2 - 3 = 2x \;\Rightarrow\; x^2 - 2x - 3 = 0 \;\Rightarrow\; x = 3$ или $x = -1$</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 5B -->
+    <h3>B. Логарифмические уравнения</h3>
+    <div class="def-box">
+      <strong>Основной метод:</strong> если $\log_a f(x) = \log_a g(x)$, то $f(x) = g(x)$, с <strong>обязательной проверкой ОДЗ</strong>: $f(x) > 0$ и $g(x) > 0$.
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Найти ОДЗ: определить, при каких $x$ все аргументы логарифмов положительны.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Привести уравнение к форме $\log_a f(x) = \log_a g(x)$ или $\log_a f(x) = c$.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Приравнять аргументы (или перейти к показательному уравнению).</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">Проверить, что найденные корни лежат в ОДЗ.</div></div>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 1 — простейшее</div>
+      <p>$\log_3(2x - 1) = 2$</p>
+      <p>ОДЗ: $2x - 1 > 0 \Rightarrow x > 0{,}5$</p>
+      <p>$2x - 1 = 3^2 = 9 \;\Rightarrow\; x = 5$ ✅</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 2 — с одинаковым основанием</div>
+      <p>$\log_5(x^2 - 4) = \log_5(3x)$</p>
+      <p>ОДЗ: $x^2 - 4 > 0$ и $3x > 0 \Rightarrow x > 2$</p>
+      <p>$x^2 - 4 = 3x \;\Rightarrow\; x^2 - 3x - 4 = 0 \;\Rightarrow\; x = 4$ или $x = -1$</p>
+      <p>В ОДЗ: $x = 4$ ✅ (−1 не входит в ОДЗ)</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 3 — замена переменной</div>
+      <p>$(\log_2 x)^2 - 3\log_2 x + 2 = 0$</p>
+      <p>Замена: $t = \log_2 x$:</p>
+      <p>$t^2 - 3t + 2 = 0 \;\Rightarrow\; t = 1$ или $t = 2$</p>
+      <p>$\log_2 x = 1 \Rightarrow x = 2$; &nbsp; $\log_2 x = 2 \Rightarrow x = 4$ ✅</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Тип 4 — смешанное уравнение</div>
+      <p>$2\log_3 x + \log_3(x-2) = 3$</p>
+      <p>ОДЗ: $x > 0$ и $x - 2 > 0 \Rightarrow x > 2$</p>
+      <p>$\log_3 x^2 + \log_3(x-2) = \log_3 27$</p>
+      <p>$\log_3[x^2(x-2)] = \log_3 27 \;\Rightarrow\; x^2(x-2) = 27$</p>
+      <p>$x^3 - 2x^2 - 27 = 0 \;\Rightarrow\; x = 3$ (проверка: $3 > 2$ ✅)</p>
+    </div>
+
+    <div class="note">
+      <span class="note-icon">⚠️</span>
+      <span>В логарифмических уравнениях <strong>всегда проверяйте ОДЗ</strong>! Корни, не входящие в ОДЗ, отбрасываются. Это типичная ошибка на ЕГЭ.</span>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 5C — Системы и смешанные -->
+    <h3>C. Нестандартные методы</h3>
+
+    <div class="example-box">
+      <div class="example-label">Метод потенцирования с переносом</div>
+      <p>$\log_2(x+3) + \log_2(x-1) = 5$</p>
+      <p>ОДЗ: $x > 1$</p>
+      <p>$\log_2[(x+3)(x-1)] = 5 \;\Rightarrow\; (x+3)(x-1) = 32$</p>
+      <p>$x^2 + 2x - 3 = 32 \;\Rightarrow\; x^2 + 2x - 35 = 0$</p>
+      <p>$x = 5$ или $x = -7$ → в ОДЗ: $x = 5$ ✅</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Метод введения новой переменной (логарифм + экспонента)</div>
+      <p>$2^x + 2^{-x} = 3$ (нет решений в логарифмах — заменяем $t = 2^x$)</p>
+      <p>$t + \dfrac{1}{t} = 3 \;\Rightarrow\; t^2 - 3t + 1 = 0 \;\Rightarrow\; t = \dfrac{3 \pm \sqrt{5}}{2}$</p>
+      <p>$x = \log_2\!\dfrac{3 \pm \sqrt{5}}{2}$</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 6 — НЕРАВЕНСТВА
+  ═══════════════════════════════════════════ -->
+  <div id="inequalities" class="section-card glass">
+    <div class="section-number num-purple">06</div>
+    <h2>Показательные и логарифмические неравенства</h2>
+
+    <!-- 6A -->
+    <h3>A. Показательные неравенства</h3>
+    <div class="def-box">
+      Ключевое правило: при переходе к неравенству показателей знак неравенства <strong>сохраняется</strong> если $a > 1$, и <strong>меняется</strong> если $0 < a < 1$.
+    </div>
+
+    <table class="glass-table">
+      <thead><tr><th>Неравенство</th><th>$a > 1$</th><th>$0 < a < 1$</th></tr></thead>
+      <tbody>
+        <tr><td>$a^{f(x)} > a^{g(x)}$</td><td>$f(x) > g(x)$</td><td>$f(x) < g(x)$</td></tr>
+        <tr><td>$a^{f(x)} < a^{g(x)}$</td><td>$f(x) < g(x)$</td><td>$f(x) > g(x)$</td></tr>
+      </tbody>
+    </table>
+
+    <div class="example-box">
+      <div class="example-label">Пример — основание > 1</div>
+      <p>$3^{2x-1} > 27$</p>
+      <p>$3^{2x-1} > 3^3 \;\Rightarrow\; 2x - 1 > 3 \;\Rightarrow\; x > 2$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — основание < 1</div>
+      <p>$\left(\dfrac{1}{2}\right)^{x-1} < 4$</p>
+      <p>$2^{-(x-1)} < 2^2 \;\Rightarrow\; -(x-1) < 2 \;\Rightarrow\; -x + 1 < 2 \;\Rightarrow\; x > -1$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — замена переменной</div>
+      <p>$9^x - 10 \cdot 3^x + 9 \leq 0$</p>
+      <p>$t = 3^x > 0$: &nbsp; $t^2 - 10t + 9 \leq 0 \;\Rightarrow\; (t-1)(t-9) \leq 0$</p>
+      <p>$1 \leq t \leq 9 \;\Rightarrow\; 1 \leq 3^x \leq 9 \;\Rightarrow\; 3^0 \leq 3^x \leq 3^2 \;\Rightarrow\; 0 \leq x \leq 2$</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 6B -->
+    <h3>B. Логарифмические неравенства</h3>
+    <div class="def-box pink">
+      <strong>Ключевое правило:</strong> при переходе к неравенству аргументов знак неравенства <strong>сохраняется</strong> если $a > 1$, и <strong>меняется</strong> если $0 < a < 1$.
+    </div>
+
+    <table class="glass-table">
+      <thead><tr><th>Неравенство</th><th>$a > 1$</th><th>$0 < a < 1$</th></tr></thead>
+      <tbody>
+        <tr><td>$\log_a f(x) > \log_a g(x)$</td><td>$f(x) > g(x)$</td><td>$f(x) < g(x)$</td></tr>
+        <tr><td>$\log_a f(x) > c$</td><td>$f(x) > a^c$</td><td>$f(x) < a^c$</td></tr>
+        <tr><td>ОДЗ всегда</td><td colspan="2">$f(x) > 0$ и $g(x) > 0$</td></tr>
+      </tbody>
+    </table>
+
+    <div class="example-box">
+      <div class="example-label">Пример — $a > 1$</div>
+      <p>$\log_2(3x - 5) > 3$</p>
+      <p>ОДЗ: $3x - 5 > 0 \Rightarrow x > 5/3$</p>
+      <p>$3x - 5 > 2^3 = 8 \;\Rightarrow\; 3x > 13 \;\Rightarrow\; x > 13/3$</p>
+      <p>Ответ: $x \in \left(\dfrac{13}{3};\, +\infty\right)$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — $0 < a < 1$</div>
+      <p>$\log_{0{,}5}(x+1) \geq -3$</p>
+      <p>ОДЗ: $x + 1 > 0 \Rightarrow x > -1$</p>
+      <p>$0 < a < 1$, поэтому знак меняется: $x + 1 \leq (0{,}5)^{-3} = 2^3 = 8$</p>
+      <p>$x + 1 \leq 8 \;\Rightarrow\; x \leq 7$</p>
+      <p>Ответ: $x \in (-1;\, 7]$</p>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Пример — переменное основание</div>
+      <p>$\log_x 5 > 1$ &nbsp;(основание — переменная!)</p>
+      <p>ОДЗ: $x > 0$, $x \neq 1$</p>
+      <p><strong>Случай 1:</strong> $x > 1$: &nbsp; $5 > x \;\Rightarrow\; 1 < x < 5$</p>
+      <p><strong>Случай 2:</strong> $0 < x < 1$: &nbsp; $5 < x$ — противоречие</p>
+      <p>Ответ: $x \in (1;\, 5)$</p>
+    </div>
+
+    <div class="note">
+      <span class="note-icon">🔑</span>
+      <span>При <strong>переменном основании</strong> решение разбивается на два случая: $a > 1$ и $0 < a < 1$. Не забудьте пересечь с ОДЗ в каждом случае!</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       БЛОК 7 — СОВЕТЫ ЕГЭ
+  ═══════════════════════════════════════════ -->
+  <div id="tips" class="section-card glass">
+    <div class="section-number num-green">07</div>
+    <h2>Советы по подготовке к ЕГЭ</h2>
+
+    <h3>Чек-лист для задания 13</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Найдите ОДЗ</strong> до начала решения — выпишите условия на аргументы логарифмов.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Определите тип уравнения</strong> — простейшее, с заменой переменной, смешанное.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Привести к одному основанию</strong> — для показательных; использовать формулу перехода — для логарифмических.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Проверьте корни в ОДЗ</strong> — все лишние корни отбрасываются!</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>В неравенствах следите за основанием</strong> — знак меняется при $0 < a < 1$.</div></div>
+    </div>
+
+    <hr class="divider" />
+
+    <h3>Шпаргалка — что нужно помнить наизусть</h3>
+    <div class="formula-grid">
+      <div class="formula-box"><span class="label">Определение</span>$\log_a b = c \Leftrightarrow a^c = b$</div>
+      <div class="formula-box"><span class="label">Произведение</span>$\log_a(mn) = \log_a m + \log_a n$</div>
+      <div class="formula-box"><span class="label">Частное</span>$\log_a\tfrac{m}{n} = \log_a m - \log_a n$</div>
+      <div class="formula-box"><span class="label">Степень</span>$\log_a m^k = k\log_a m$</div>
+      <div class="formula-box"><span class="label">Переход</span>$\log_a b = \tfrac{\log_c b}{\log_c a}$</div>
+      <div class="formula-box"><span class="label">Обратное</span>$\log_a b = \tfrac{1}{\log_b a}$</div>
+      <div class="formula-box"><span class="label">Тождество</span>$a^{\log_a b} = b$</div>
+      <div class="formula-box"><span class="label">Степень осн.</span>$\log_{a^n}b^m = \tfrac{m}{n}\log_a b$</div>
+    </div>
+
+    <div class="note">
+      <span class="note-icon">🎯</span>
+      <span>В задании 15 ЕГЭ оценивается <strong>полнота решения</strong>: запись ОДЗ, обоснование отбора корней, правильный ответ. Каждый пропущенный шаг может стоить балл.</span>
+    </div>
+
+    <hr class="divider" />
+
+    <h3>Источники для углублённой подготовки</h3>
+    <ul class="sources-list">
+      <li><div class="src-dot"></div><a href="https://vpr-ege.ru/ege/matematika/3206-svojstva-logarifmov-metodichka-dlya-ege" target="_blank">Свойства логарифмов: методичка для ЕГЭ — vpr-ege.ru</a></li>
+      <li><div class="src-dot"></div><a href="https://mathus.ru/math/log.pdf" target="_blank">Статья-конспект «Логарифм» (PDF) — mathus.ru</a></li>
+      <li><div class="src-dot"></div><a href="https://infourok.ru/pokazatelnye-i-logarifmicheskie-uravneniya-na-ege-po-matematike-profilnogo-urovnya-7076253.html" target="_blank">Показательные и логарифмические уравнения на ЕГЭ — infourok.ru</a></li>
+      <li><div class="src-dot"></div><a href="https://www.youtube.com/watch?v=YiaM3qXlaDo" target="_blank">Логарифмы за 40 минут для ЕГЭ (Умскул, Артур Шарафиев) — YouTube</a></li>
+      <li><div class="src-dot"></div><a href="https://maximumtest.ru/uchebnik/11-klass/matematika/pokazatelnye-i-logarifmicheskiye-neravenstva" target="_blank">Показательные и логарифмические неравенства — maximumtest.ru</a></li>
+      <li><div class="src-dot"></div><a href="https://genius.pstu.ru/joomla/files/methodological/tutorial_9.pdf" target="_blank">Решение показательных и логарифмических уравнений (ПНИПУ, PDF) — genius.pstu.ru</a></li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p style="font-size:1rem;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:6px;">Школа Prepolyanski</p>
+    <p>Материал подготовлен для ЕГЭ по профильной математике · Задание 13</p>
+    <p style="margin-top:6px;color:rgba(255,255,255,0.3);">Логарифмы и показательные функции · Полная теория</p>
+  </footer>
+
+</div><!-- /page-wrap -->
+
+<a href="#" id="top-btn" title="Наверх">↑</a>
+
+</body>
+</html>
