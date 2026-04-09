@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Задачи ЕГЭ | Школа Prepolyanski</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] },
+      options: { skipHtmlTags:['script','noscript','style','textarea'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    :root {
+      --blur: blur(22px);
+      --glass:    rgba(255,255,255,0.07);
+      --border:   rgba(255,255,255,0.16);
+      --shadow:   0 8px 32px rgba(0,0,0,0.4);
+      --accent:   #a78bfa;
+      --accent2:  #60a5fa;
+      --accent3:  #f472b6;
+      --green:    #34d399;
+      --text:     rgba(255,255,255,0.92);
+      --muted:    rgba(255,255,255,0.5);
+      --r:        22px;
+    }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* blobs */
+    .blob { position:fixed; border-radius:50%; filter:blur(80px); opacity:0.3; pointer-events:none; z-index:0; animation:drift 20s ease-in-out infinite alternate; }
+    .b1 { width:500px;height:500px;background:#7c3aed;top:-150px;left:-100px;animation-delay:0s; }
+    .b2 { width:380px;height:380px;background:#2563eb;top:40%;right:-100px;animation-delay:-7s; }
+    .b3 { width:320px;height:320px;background:#db2777;bottom:0;left:20%;animation-delay:-14s; }
+    @keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(35px,25px) scale(1.07)} }
+
+    /* layout */
+    .wrap { position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 20px 80px; }
+
+    /* header */
+    header {
+      position:sticky;top:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;margin:0 -20px;
+      background:rgba(15,12,41,0.6);
+      backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    .logo { display:flex;align-items:center;gap:12px;text-decoration:none; }
+    .logo-icon {
+      width:42px;height:42px;border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#a855f7,#3b82f6);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 20px rgba(124,58,237,0.5),inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    .logo-icon svg { width:24px;height:24px; }
+    .logo-school { font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent); }
+    .logo-name   { font-size:1.05rem;font-weight:700;color:#fff; }
+    nav a {
+      font-size:.8rem;font-weight:500;color:var(--muted);text-decoration:none;
+      padding:6px 13px;border-radius:20px;transition:all .2s;
+    }
+    nav a:hover { color:#fff;background:rgba(255,255,255,0.1); }
+    nav { display:flex;gap:4px; }
+
+    /* hero */
+    .hero { text-align:center;padding:60px 20px 44px; }
+    .badge {
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--accent);background:rgba(167,139,250,0.12);
+      border:1px solid rgba(167,139,250,0.28);border-radius:20px;
+      padding:5px 14px;margin-bottom:18px;
+    }
+    .hero h1 {
+      font-size:clamp(1.9rem,5.5vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;
+      background:linear-gradient(135deg,#fff 25%,#a78bfa 60%,#60a5fa 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      margin-bottom:12px;
+    }
+    .hero p { font-size:1rem;color:var(--muted);max-width:520px;margin:0 auto 28px;line-height:1.65; }
+
+    /* hint */
+    .hint {
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);
+      border-radius:30px;padding:8px 20px;font-size:.82rem;color:var(--muted);
+    }
+    .hint span { color:#fff; }
+
+    /* filters */
+    .filters { display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:32px 0 40px; }
+    .filter-btn {
+      font-size:.8rem;font-weight:500;color:var(--muted);
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);
+      border-radius:24px;padding:7px 18px;cursor:pointer;transition:all .2s;
+    }
+    .filter-btn:hover,.filter-btn.active {
+      background:rgba(167,139,250,0.2);border-color:rgba(167,139,250,0.4);color:#fff;
+    }
+
+    /* progress bar */
+    .progress-wrap { margin:0 0 36px;text-align:center; }
+    .progress-label { font-size:.8rem;color:var(--muted);margin-bottom:8px; }
+    .progress-bar-bg {
+      height:6px;border-radius:6px;
+      background:rgba(255,255,255,0.08);
+      max-width:400px;margin:0 auto 6px;overflow:hidden;
+    }
+    .progress-bar-fill {
+      height:100%;border-radius:6px;width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .5s ease;
+    }
+    .progress-count { font-size:.8rem;color:var(--muted); }
+    .progress-count b { color:var(--green); }
+
+    /* grid */
+    .cards-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:22px;
+    }
+
+    /* ── FLIP CARD ── */
+    .card-outer {
+      perspective: 1000px;
+      height: 300px;
+      cursor: pointer;
+    }
+    .card-outer.tall { height: 360px; }
+    .card-outer.xtall { height: 420px; }
+
+    .card-inner {
+      position:relative;width:100%;height:100%;
+      transform-style:preserve-3d;
+      transition:transform .55s cubic-bezier(.4,0,.2,1);
+    }
+    .card-outer.flipped .card-inner { transform:rotateY(180deg); }
+
+    .card-face {
+      position:absolute;inset:0;
+      border-radius:var(--r);
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+      padding:24px 26px;
+      display:flex;flex-direction:column;
+    }
+
+    /* front */
+    .card-front {
+      background:var(--glass);
+      backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+    .card-front::before {
+      content:'';position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(255,255,255,0.05) 0%,rgba(255,255,255,0) 60%);
+      pointer-events:none;
+    }
+
+    /* back */
+    .card-back {
+      background:rgba(15,12,40,0.75);
+      backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+      border:1px solid rgba(167,139,250,0.35);
+      box-shadow:0 8px 40px rgba(124,58,237,0.25);
+      transform:rotateY(180deg);
+    }
+    .card-back::before {
+      content:'';position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(167,139,250,0.08) 0%,rgba(96,165,250,0.04) 100%);
+      pointer-events:none;
+    }
+
+    /* card top row */
+    .card-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-shrink:0; }
+    .task-num {
+      font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      padding:4px 11px;border-radius:16px;
+    }
+    .type-exp   { background:rgba(96,165,250,0.15);color:var(--accent2);border:1px solid rgba(96,165,250,0.3); }
+    .type-log   { background:rgba(167,139,250,0.15);color:var(--accent);border:1px solid rgba(167,139,250,0.3); }
+    .type-eq    { background:rgba(52,211,153,0.15);color:var(--green);border:1px solid rgba(52,211,153,0.3); }
+    .type-ineq  { background:rgba(244,114,182,0.15);color:var(--accent3);border:1px solid rgba(244,114,182,0.3); }
+
+    .flip-hint { font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:4px; }
+    .flip-icon { font-size:.9rem;transition:transform .3s; }
+    .card-outer:hover .flip-icon { transform:rotate(180deg); }
+
+    /* difficulty dots */
+    .difficulty { display:flex;gap:3px;align-items:center; }
+    .dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15); }
+    .dot.on { background:var(--accent); }
+
+    /* task body */
+    .task-body {
+      flex:1;display:flex;flex-direction:column;justify-content:center;
+      font-size:.93rem;line-height:1.7;color:rgba(255,255,255,0.82);
+    }
+    .task-label { font-size:.7rem;color:var(--muted);margin-bottom:6px;font-weight:500; }
+    .task-formula { font-size:1rem;color:#fff;margin:6px 0; }
+
+    /* card bottom */
+    .card-bot { flex-shrink:0;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08); }
+    .card-bot-text { font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:5px; }
+
+    /* back content */
+    .back-label {
+      font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--accent);margin-bottom:10px;flex-shrink:0;
+    }
+    .solution {
+      flex:1;overflow-y:auto;font-size:.87rem;line-height:1.75;color:rgba(255,255,255,0.82);
+    }
+    .solution::-webkit-scrollbar { width:3px; }
+    .solution::-webkit-scrollbar-track { background:transparent; }
+    .solution::-webkit-scrollbar-thumb { background:rgba(167,139,250,0.4);border-radius:3px; }
+
+    .sol-step { display:flex;gap:8px;margin-bottom:5px;align-items:flex-start; }
+    .sol-step-n {
+      flex-shrink:0;width:18px;height:18px;border-radius:50%;
+      background:rgba(167,139,250,0.25);color:var(--accent);
+      font-size:.63rem;font-weight:700;display:flex;align-items:center;justify-content:center;
+      margin-top:2px;
+    }
+
+    .answer-box {
+      flex-shrink:0;margin-top:10px;padding:10px 14px;
+      background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);
+      border-radius:10px;font-size:.88rem;color:var(--green);font-weight:600;
+    }
+    .answer-box .a-label { font-size:.65rem;color:rgba(52,211,153,0.7);margin-bottom:2px; }
+
+    .back-close {
+      flex-shrink:0;text-align:right;margin-top:8px;
+      font-size:.7rem;color:var(--muted);
+    }
+
+    /* solved badge */
+    .solved-badge {
+      position:absolute;top:14px;right:14px;z-index:10;
+      width:26px;height:26px;border-radius:50%;
+      background:rgba(52,211,153,0.2);border:1.5px solid var(--green);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;opacity:0;transition:opacity .3s;pointer-events:none;
+    }
+    .card-outer.solved .solved-badge { opacity:1; }
+
+    /* mark solved btn */
+    .mark-btn {
+      margin-top:10px;padding:7px 14px;border-radius:10px;
+      background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.3);
+      color:var(--green);font-size:.75rem;font-weight:600;cursor:pointer;
+      transition:all .2s;width:100%;
+    }
+    .mark-btn:hover { background:rgba(52,211,153,0.22); }
+    .mark-btn.done { background:rgba(52,211,153,0.25);border-color:var(--green); }
+
+    /* no results */
+    .no-results { text-align:center;padding:60px 0;color:var(--muted);font-size:1rem; }
+
+    /* footer */
+    footer { text-align:center;color:var(--muted);font-size:.78rem;padding:32px 0 0;line-height:1.8; }
+    footer strong { color:rgba(255,255,255,.65); }
+
+    /* back to top */
+    #top-btn {
+      position:fixed;bottom:26px;right:26px;width:44px;height:44px;border-radius:50%;
+      background:rgba(167,139,250,0.85);backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:1.2rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 20px rgba(124,58,237,0.45);transition:all .2s;
+      text-decoration:none;z-index:200;
+    }
+    #top-btn:hover { transform:translateY(-2px); }
+
+    @media(max-width:600px){
+      .cards-grid { grid-template-columns:1fr; }
+      .card-outer { height:auto;min-height:280px; }
+      .card-outer.tall { height:auto;min-height:340px; }
+      .card-outer.xtall { height:auto;min-height:400px; }
+    }
+  </style>
+</head>
+<body>
+<div class="b1 blob"></div>
+<div class="b2 blob"></div>
+<div class="b3 blob"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 20 L8 4 L12 14 L16 8 L20 20" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-school">Школа</div>
+      <div class="logo-name">Prepolyanski</div>
+    </div>
+  </a>
+  <nav>
+    <a href="index.html">← Теория</a>
+    <a href="#">Задачи ЕГЭ</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">ЕГЭ · Задание 15 · Профиль</div>
+    <h1>10 задач второй части</h1>
+    <p>Логарифмы и показательные функции — нажми на карточку, чтобы увидеть решение</p>
+    <div class="hint">
+      <span>👆</span> Нажми на карточку — она перевернётся и покажет <span>решение&nbsp;и&nbsp;ответ</span>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Все задачи</button>
+    <button class="filter-btn" data-filter="exp">Показательные</button>
+    <button class="filter-btn" data-filter="log">Логарифмические</button>
+    <button class="filter-btn" data-filter="eq">Уравнения</button>
+    <button class="filter-btn" data-filter="ineq">Неравенства</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">Прогресс решения</div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-count">Решено: <b id="solvedCount">0</b> из <b>10</b></div>
+  </div>
+
+  <!-- CARDS GRID -->
+  <div class="cards-grid" id="cardsGrid">
+
+    <!-- ═══ КАРТОЧКА 1 ═══ -->
+    <div class="card-outer" data-type="exp eq" data-id="1">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <!-- FRONT -->
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-exp">Показат.</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 1 · Уравнение · ЕГЭ 2023</div>
+            <div class="task-formula">Решите уравнение:</div>
+            <div>$$4^x - 5 \cdot 2^x + 4 = 0$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Метод замены переменной</div>
+          </div>
+        </div>
+        <!-- BACK -->
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div>Запишем $4^x = (2^x)^2$. Введём замену: $t = 2^x,\; t > 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$t^2 - 5t + 4 = 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$(t-1)(t-4) = 0 \;\Rightarrow\; t = 1$ или $t = 4$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$2^x = 1 = 2^0 \Rightarrow x = 0$; &nbsp; $2^x = 4 = 2^2 \Rightarrow x = 2$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x = 0,\quad x = 2$</div>
+          <button class="mark-btn" onclick="markSolved(event,1)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 2 ═══ -->
+    <div class="card-outer" data-type="exp ineq" data-id="2">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-ineq">Неравенство</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 2 · Показательное неравенство</div>
+            <div class="task-formula">Решите неравенство:</div>
+            <div>$$\left(\frac{1}{3}\right)^{2x-1} \leq 9^{x+2}$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Привести к одному основанию</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div>$\left(\frac{1}{3}\right)^{2x-1} = 3^{-(2x-1)}$, &nbsp; $9^{x+2} = 3^{2(x+2)}$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$3^{-(2x-1)} \leq 3^{2x+4}$; &nbsp; основание $3 > 1$, знак сохраняется:</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$-(2x-1) \leq 2x+4 \;\Rightarrow\; -2x+1 \leq 2x+4$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$-3 \leq 4x \;\Rightarrow\; x \geq -\dfrac{3}{4}$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x \in \left[-\dfrac{3}{4};\; +\infty\right)$</div>
+          <button class="mark-btn" onclick="markSolved(event,2)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 3 ═══ -->
+    <div class="card-outer" data-type="log eq" data-id="3">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-log">Логарифм.</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 3 · Уравнение · ЕГЭ 2022</div>
+            <div class="task-formula">Решите уравнение:</div>
+            <div>$$\log_2(x+3) + \log_2(x-1) = 5$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Сложение логарифмов + ОДЗ</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x+3>0$ и $x-1>0 \;\Rightarrow\; x > 1$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$\log_2[(x+3)(x-1)] = 5$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$(x+3)(x-1) = 2^5 = 32$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$x^2+2x-3 = 32 \;\Rightarrow\; x^2+2x-35=0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$x=5$ или $x=-7$ → $x=-7 \notin$ ОДЗ ✗</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x = 5$</div>
+          <button class="mark-btn" onclick="markSolved(event,3)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 4 ═══ -->
+    <div class="card-outer" data-type="log eq" data-id="4">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-log">Логарифм.</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 4 · Уравнение · замена</div>
+            <div class="task-formula">Решите уравнение:</div>
+            <div>$$(\log_3 x)^2 - 3\log_3 x + 2 = 0$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Квадратное уравнение по логарифму</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x > 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>Замена $t = \log_3 x$:</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$t^2 - 3t + 2 = 0 \;\Rightarrow\; (t-1)(t-2)=0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$t=1: \;\log_3 x = 1 \Rightarrow x = 3$ ✅</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$t=2: \;\log_3 x = 2 \Rightarrow x = 9$ ✅</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x = 3,\quad x = 9$</div>
+          <button class="mark-btn" onclick="markSolved(event,4)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 5 ═══ -->
+    <div class="card-outer" data-type="exp ineq" data-id="5">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-ineq">Неравенство</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 5 · Показат. неравенство · ЕГЭ 2023</div>
+            <div class="task-formula">Решите неравенство:</div>
+            <div>$$9^x - 10 \cdot 3^x + 9 \leq 0$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Замена + квадратное неравенство</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div>Замена $t = 3^x > 0$, тогда $9^x = t^2$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$t^2 - 10t + 9 \leq 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$(t-1)(t-9) \leq 0 \;\Rightarrow\; 1 \leq t \leq 9$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$3^0 \leq 3^x \leq 3^2$, основание $3>1$</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$0 \leq x \leq 2$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x \in [0;\; 2]$</div>
+          <button class="mark-btn" onclick="markSolved(event,5)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 6 ═══ -->
+    <div class="card-outer" data-type="log ineq" data-id="6">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-ineq">Неравенство</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 6 · Логарифмич. неравенство</div>
+            <div class="task-formula">Решите неравенство:</div>
+            <div>$$\log_2 x + \log_2(x - 3) \leq 2$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 ОДЗ + сложение логарифмов</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x>0$ и $x-3>0 \;\Rightarrow\; x > 3$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$\log_2[x(x-3)] \leq 2 = \log_2 4$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>Основание $2>1$: $x(x-3) \leq 4$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$x^2-3x-4 \leq 0 \;\Rightarrow\; (x-4)(x+1) \leq 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$-1 \leq x \leq 4$; пересечение с ОДЗ $(x>3)$: $3 < x \leq 4$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x \in (3;\; 4]$</div>
+          <button class="mark-btn" onclick="markSolved(event,6)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 7 ═══ -->
+    <div class="card-outer tall" data-type="exp eq" data-id="7">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-exp">Показат.</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 7 · Уравнение · ЕГЭ 2024</div>
+            <div class="task-formula">Решите уравнение:</div>
+            <div>$$2^{x+1} + 2^{3-x} = 10$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Замена + квадратное уравнение</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div>$2 \cdot 2^x + \dfrac{8}{2^x} = 10$; замена $t = 2^x > 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$2t + \dfrac{8}{t} = 10 \;\Rightarrow\; 2t^2 - 10t + 8 = 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$t^2 - 5t + 4 = 0 \;\Rightarrow\; (t-1)(t-4)=0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$t=1: \;2^x=1=2^0 \Rightarrow x=0$ ✅</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$t=4: \;2^x=4=2^2 \Rightarrow x=2$ ✅</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x = 0,\quad x = 2$</div>
+          <button class="mark-btn" onclick="markSolved(event,7)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 8 ═══ -->
+    <div class="card-outer tall" data-type="log ineq" data-id="8">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-ineq">Неравенство</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 8 · Лог. неравенство · ЕГЭ 2023</div>
+            <div class="task-formula">Решите неравенство:</div>
+            <div>$$\log_{0{,}5}(x+1) \geq -3$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Основание меньше 1 — знак меняется</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x + 1 > 0 \;\Rightarrow\; x > -1$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$0{,}5 = \tfrac{1}{2} \in (0;1)$ → при потенцировании знак <b>меняется</b></div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$x+1 \leq \left(\tfrac{1}{2}\right)^{-3} = 2^3 = 8$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$x \leq 7$; пересечение с ОДЗ: $-1 < x \leq 7$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x \in (-1;\; 7]$</div>
+          <button class="mark-btn" onclick="markSolved(event,8)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 9 ═══ -->
+    <div class="card-outer tall" data-type="log eq" data-id="9">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-log">Логарифм.</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 9 · Уравнение · ЕГЭ 2024</div>
+            <div class="task-formula">Решите уравнение:</div>
+            <div>$$\log_3(x + 6) + \log_3 x = 3$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Сложение логарифмов + ОДЗ</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x+6>0$ и $x>0 \;\Rightarrow\; x > 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$\log_3[(x+6)\cdot x] = 3 = \log_3 27$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$x(x+6) = 27 \;\Rightarrow\; x^2 + 6x - 27 = 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>$D = 36 + 108 = 144$; &nbsp; $x = \dfrac{-6 \pm 12}{2}$</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$x = 3$ или $x = -9$; в ОДЗ $(x>0)$: $x=3$ ✅</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x = 3$</div>
+          <button class="mark-btn" onclick="markSolved(event,9)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ КАРТОЧКА 10 ═══ -->
+    <div class="card-outer tall" data-type="log ineq" data-id="10">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-top">
+            <span class="task-num type-ineq">Неравенство</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+              <div class="flip-hint"><span class="flip-icon">↩</span></div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-label">Задача 10 · Лог. неравенство · ЕГЭ 2024</div>
+            <div class="task-formula">Решите неравенство:</div>
+            <div>$$\log_2 4x - \log_4 x \geq 3$$</div>
+          </div>
+          <div class="card-bot">
+            <div class="card-bot-text">📌 Разные основания → формула перехода</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-label">Решение</div>
+          <div class="solution">
+            <div class="sol-step"><div class="sol-step-n">1</div><div><b>ОДЗ:</b> $x > 0$</div></div>
+            <div class="sol-step"><div class="sol-step-n">2</div><div>$\log_4 x = \dfrac{\log_2 x}{\log_2 4} = \dfrac{\log_2 x}{2}$</div></div>
+            <div class="sol-step"><div class="sol-step-n">3</div><div>$\log_2 4x = \log_2 4 + \log_2 x = 2 + \log_2 x$</div></div>
+            <div class="sol-step"><div class="sol-step-n">4</div><div>Замена $t = \log_2 x$: $\;(2+t) - \dfrac{t}{2} \geq 3$</div></div>
+            <div class="sol-step"><div class="sol-step-n">5</div><div>$2 + \dfrac{t}{2} \geq 3 \;\Rightarrow\; \dfrac{t}{2} \geq 1 \;\Rightarrow\; t \geq 2$</div></div>
+            <div class="sol-step"><div class="sol-step-n">6</div><div>$\log_2 x \geq 2 \;\Rightarrow\; x \geq 4$</div></div>
+          </div>
+          <div class="answer-box"><div class="a-label">ОТВЕТ</div>$x \in [4;\; +\infty)$</div>
+          <button class="mark-btn" onclick="markSolved(event,10)">✓ Отметить решённой</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cards-grid -->
+
+  <footer>
+    <strong>Школа Prepolyanski</strong> · Задание 15 ЕГЭ · Профильная математика<br>
+    Источники: vpr-ege.ru · mathus.ru · infourok.ru · maximumtest.ru · ФИПИ
+  </footer>
+
+</div><!-- /wrap -->
+
+<a href="#" id="top-btn">↑</a>
+
+<script>
+  // ── Flip cards ──
+  document.querySelectorAll('.card-outer').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.classList.contains('mark-btn')) return;
+      this.classList.toggle('flipped');
+    });
+  });
+
+  // ── Mark solved ──
+  const solved = new Set(JSON.parse(localStorage.getItem('solvedCards') || '[]'));
+
+  function applyBadges() {
+    solved.forEach(id => {
+      const card = document.querySelector(`.card-outer[data-id="${id}"]`);
+      if (card) {
+        card.classList.add('solved');
+        const btn = card.querySelector('.mark-btn');
+        if (btn) { btn.textContent = '✓ Решено!'; btn.classList.add('done'); }
+      }
+    });
+    updateProgress();
+  }
+
+  function markSolved(e, id) {
+    e.stopPropagation();
+    const card = document.querySelector(`.card-outer[data-id="${id}"]`);
+    if (solved.has(id)) {
+      solved.delete(id);
+      card.classList.remove('solved');
+      e.target.textContent = '✓ Отметить решённой';
+      e.target.classList.remove('done');
+    } else {
+      solved.add(id);
+      card.classList.add('solved');
+      e.target.textContent = '✓ Решено!';
+      e.target.classList.add('done');
+    }
+    localStorage.setItem('solvedCards', JSON.stringify([...solved]));
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.card-outer').length;
+    const n = solved.size;
+    document.getElementById('solvedCount').textContent = n;
+    document.getElementById('progressFill').style.width = (n / total * 100) + '%';
+  }
+
+  applyBadges();
+
+  // ── Filters ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const filter = this.dataset.filter;
+      document.querySelectorAll('.card-outer').forEach(card => {
+        const types = card.dataset.type || '';
+        card.style.display = (filter === 'all' || types.includes(filter)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Задачи ЕГЭ | Школа Prepolyanski</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] },
+      options: { skipHtmlTags:['script','noscript','style','textarea'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --blur: blur(22px);
+      --glass: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.16);
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --accent: #a78bfa;
+      --accent2: #60a5fa;
+      --accent3: #f472b6;
+      --green: #34d399;
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.5);
+      --r: 22px;
+    }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .blob { position:fixed; border-radius:50%; filter:blur(80px); opacity:0.3; pointer-events:none; z-index:0; animation:drift 20s ease-in-out infinite alternate; }
+    .b1 { width:500px;height:500px;background:#7c3aed;top:-150px;left:-100px;animation-delay:0s; }
+    .b2 { width:380px;height:380px;background:#2563eb;top:40%;right:-100px;animation-delay:-7s; }
+    .b3 { width:320px;height:320px;background:#db2777;bottom:0;left:20%;animation-delay:-14s; }
+    @keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(35px,25px) scale(1.07)} }
+
+    .wrap { position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 20px 80px; }
+
+    /* header */
+    header {
+      position:sticky;top:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;margin:0 -20px;
+      background:rgba(15,12,41,0.6);
+      backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    .logo { display:flex;align-items:center;gap:12px;text-decoration:none; }
+    .logo-icon {
+      width:42px;height:42px;border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#a855f7,#3b82f6);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 20px rgba(124,58,237,0.5),inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    .logo-icon svg { width:24px;height:24px; }
+    .logo-school { font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent); }
+    .logo-name   { font-size:1.05rem;font-weight:700;color:#fff; }
+    nav { display:flex;gap:4px; }
+    nav a { font-size:.8rem;font-weight:500;color:var(--muted);text-decoration:none;padding:6px 13px;border-radius:20px;transition:all .2s; }
+    nav a:hover { color:#fff;background:rgba(255,255,255,0.1); }
+
+    /* hero */
+    .hero { text-align:center;padding:56px 20px 36px; }
+    .badge {
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--accent);background:rgba(167,139,250,0.12);
+      border:1px solid rgba(167,139,250,0.28);border-radius:20px;
+      padding:5px 14px;margin-bottom:16px;
+    }
+    .hero h1 {
+      font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;
+      background:linear-gradient(135deg,#fff 25%,#a78bfa 60%,#60a5fa 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      margin-bottom:12px;
+    }
+    .hero p { font-size:1rem;color:var(--muted);max-width:520px;margin:0 auto 16px;line-height:1.65; }
+    .hint {
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);
+      border-radius:30px;padding:7px 18px;font-size:.82rem;color:var(--muted);
+    }
+    .hint span { color:#fff; }
+
+    /* filters */
+    .filters { display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:28px 0 22px; }
+    .filter-btn {
+      font-size:.8rem;font-weight:500;color:var(--muted);
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);
+      border-radius:24px;padding:7px 18px;cursor:pointer;transition:all .2s;
+    }
+    .filter-btn:hover,.filter-btn.active {
+      background:rgba(167,139,250,0.2);border-color:rgba(167,139,250,0.4);color:#fff;
+    }
+
+    /* progress */
+    .progress-wrap { text-align:center;margin-bottom:32px; }
+    .progress-label { font-size:.8rem;color:var(--muted);margin-bottom:8px; }
+    .progress-bar-bg { height:6px;border-radius:6px;background:rgba(255,255,255,0.08);max-width:440px;margin:0 auto 6px;overflow:hidden; }
+    .progress-bar-fill { height:100%;border-radius:6px;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s ease; }
+    .progress-count { font-size:.8rem;color:var(--muted); }
+    .progress-count b { color:var(--green); }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       СПИСОК КАРТОЧЕК — 1 в ряд
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    .cards-list { display:flex;flex-direction:column;gap:16px; }
+
+    /* ── FLIP CARD ── */
+    .card-outer {
+      perspective: 1200px;
+      height: 130px;
+      cursor: pointer;
+      position: relative;
+    }
+    .card-outer.tall  { height: 160px; }
+    .card-outer.xtall { height: 190px; }
+
+    .card-inner {
+      position:relative;width:100%;height:100%;
+      transform-style:preserve-3d;
+      transition:transform .5s cubic-bezier(.4,0,.2,1);
+    }
+    .card-outer.flipped .card-inner { transform:rotateY(180deg); }
+
+    /* обе стороны */
+    .card-face {
+      position:absolute;inset:0;
+      border-radius:var(--r);
+      backface-visibility:hidden;-webkit-backface-visibility:hidden;
+      display:flex;flex-direction:row;align-items:center;
+      padding:0;
+      overflow:hidden;
+    }
+
+    /* ЛИЦО */
+    .card-front {
+      background:var(--glass);
+      backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+    .card-front::after {
+      content:'';position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,transparent 60%);
+      pointer-events:none;
+    }
+
+    /* ОБРАТНАЯ СТОРОНА */
+    .card-back {
+      background:rgba(14,11,40,0.82);
+      backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+      border:1px solid rgba(167,139,250,0.35);
+      box-shadow:0 8px 40px rgba(124,58,237,0.22);
+      transform:rotateY(180deg);
+    }
+    .card-back::after {
+      content:'';position:absolute;inset:0;border-radius:inherit;
+      background:linear-gradient(135deg,rgba(167,139,250,0.06) 0%,rgba(96,165,250,0.02) 100%);
+      pointer-events:none;
+    }
+
+    /* ── Левая панель карточки ── */
+    .c-left {
+      flex-shrink:0;
+      width:200px;
+      height:100%;
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+      gap:8px;padding:18px 22px;
+      border-right:1px solid rgba(255,255,255,0.08);
+    }
+    .c-left.back-side { border-right-color:rgba(167,139,250,0.15); }
+
+    .task-num {
+      font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      padding:4px 10px;border-radius:14px;
+    }
+    .type-ineq { background:rgba(244,114,182,0.15);color:var(--accent3);border:1px solid rgba(244,114,182,0.3); }
+    .type-eq   { background:rgba(52,211,153,0.15);color:var(--green);border:1px solid rgba(52,211,153,0.3); }
+
+    .year-tag { font-size:.68rem;color:var(--muted);background:rgba(255,255,255,0.08);border-radius:8px;padding:3px 9px; }
+
+    .difficulty { display:flex;gap:3px; }
+    .dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15); }
+    .dot.on { background:var(--accent); }
+
+    .hint-tag { font-size:.68rem;color:var(--muted);line-height:1.4; }
+
+    .flip-hint { font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:4px;margin-top:auto; }
+    .flip-anim { display:inline-block;transition:transform .3s; }
+    .card-outer:hover .flip-anim { transform:rotate(180deg); }
+
+    /* ── Правая часть (задача / ответ) ── */
+    .c-right {
+      flex:1;
+      height:100%;
+      display:flex;flex-direction:column;justify-content:center;
+      padding:18px 28px;
+      gap:4px;
+      overflow:hidden;
+    }
+
+    .task-label { font-size:.7rem;color:var(--muted);font-weight:500;margin-bottom:2px; }
+    .task-intro { font-size:.82rem;color:rgba(255,255,255,0.7);margin-bottom:2px; }
+    .task-sub   { font-size:.78rem;color:rgba(255,255,255,0.55);margin-top:2px;line-height:1.45; }
+
+    /* back */
+    .back-label { font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px; }
+    .back-num   { font-size:.75rem;color:var(--muted); }
+
+    .answer-box {
+      padding:10px 16px;
+      background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.28);border-radius:12px;
+    }
+    .a-label { font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(52,211,153,.65);margin-bottom:4px; }
+    .a-val   { font-size:.92rem;color:var(--green);font-weight:500;line-height:1.6; }
+    .a-part  { display:flex;gap:6px;align-items:baseline;margin-bottom:1px; }
+    .a-pl    { font-size:.75rem;font-weight:700;color:var(--green);min-width:18px; }
+
+    .mark-btn {
+      padding:6px 14px;border-radius:9px;margin-top:6px;
+      background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.28);
+      color:var(--green);font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;
+      align-self:flex-start;
+    }
+    .mark-btn:hover { background:rgba(52,211,153,0.2); }
+    .mark-btn.done  { background:rgba(52,211,153,0.25);border-color:var(--green); }
+
+    /* solved dot */
+    .solved-badge {
+      position:absolute;top:12px;right:12px;z-index:10;
+      width:24px;height:24px;border-radius:50%;
+      background:rgba(52,211,153,0.2);border:1.5px solid var(--green);
+      display:flex;align-items:center;justify-content:center;font-size:.75rem;
+      opacity:0;transition:opacity .3s;pointer-events:none;
+    }
+    .card-outer.solved .solved-badge { opacity:1; }
+
+    footer { text-align:center;color:var(--muted);font-size:.78rem;padding:32px 0 0;line-height:1.8; }
+    footer strong { color:rgba(255,255,255,.65); }
+    footer a { color:var(--accent2);text-decoration:none; }
+
+    #top-btn {
+      position:fixed;bottom:26px;right:26px;width:44px;height:44px;border-radius:50%;
+      background:rgba(167,139,250,0.85);backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:1.2rem;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 20px rgba(124,58,237,0.45);transition:all .2s;
+      text-decoration:none;z-index:200;
+    }
+    #top-btn:hover { transform:translateY(-2px); }
+
+    @media(max-width:600px){
+      .c-left { width:140px;padding:14px 14px; }
+      .c-right { padding:14px 16px; }
+      .card-outer { height:auto;min-height:120px; }
+      .card-outer.tall  { height:auto;min-height:150px; }
+      .card-outer.xtall { height:auto;min-height:180px; }
+      .card-face { flex-direction:column;align-items:stretch; }
+      .c-left { width:100%;height:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);flex-direction:row;flex-wrap:wrap;gap:6px; }
+    }
+  </style>
+</head>
+<body>
+<div class="b1 blob"></div>
+<div class="b2 blob"></div>
+<div class="b3 blob"></div>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M4 20 L8 4 L12 14 L16 8 L20 20" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-school">Школа</div>
+      <div class="logo-name">Prepolyanski</div>
+    </div>
+  </a>
+  <nav>
+    <a href="index.html">Теория</a>
+    <a href="tasks.html">Задачи №1</a>
+    <a href="#">Задачи №2</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="badge">ЕГЭ · Задание 15 · 2017–2025</div>
+    <h1>10 задач из реального ЕГЭ</h1>
+    <p>Логарифмические неравенства и уравнения. Нажми на карточку — появится ответ.</p>
+    <div class="hint"><span>👆</span> Нажми на карточку — она перевернётся и покажет <span>ответ</span></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Все задачи</button>
+    <button class="filter-btn" data-filter="eq">Уравнения</button>
+    <button class="filter-btn" data-filter="ineq">Неравенства</button>
+    <button class="filter-btn" data-filter="y2025">ЕГЭ 2025</button>
+    <button class="filter-btn" data-filter="y2024">ЕГЭ 2024</button>
+    <button class="filter-btn" data-filter="y2023">ЕГЭ 2023</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">Прогресс</div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-count">Решено: <b id="solvedCount">0</b> из <b>10</b></div>
+  </div>
+
+  <div class="cards-list" id="cardsList">
+
+    <!-- ══ 1 ══ -->
+    <div class="card-outer tall" data-type="eq y2025" data-id="p1">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-eq">Уравнение</span>
+            <span class="year-tag">ЕГЭ 2025</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 а) + б)</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 1</div>
+            <div class="task-intro">а) Решите уравнение:</div>
+            <div>$$6\log^2_{\frac{1}{8}} x - 5\log_8 x + 1 = 0$$</div>
+            <div class="task-sub">б) Укажите корни, принадлежащие отрезку $[1;\;2{,}5]$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2025</div>
+            <button class="mark-btn" onclick="markSolved(event,'p1')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-part"><span class="a-pl">а)</span><span class="a-val">$x = 2,\quad x = 2\sqrt{2}$</span></div>
+              <div class="a-part"><span class="a-pl">б)</span><span class="a-val">$x = 2$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2 ══ -->
+    <div class="card-outer tall" data-type="ineq y2025" data-id="p2">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2025</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Лог. неравенство</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 2</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$7\log_3(x^2-7x+12)\leqslant 8+\log_3\frac{(x-3)^7}{x-4}$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2025</div>
+            <button class="mark-btn" onclick="markSolved(event,'p2')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in[1;\,3)\cup(4;\,7]$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3 ══ -->
+    <div class="card-outer tall" data-type="ineq y2024" data-id="p3">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2024</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Дробное лог.</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 3</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\frac{\log_2(2x^2-13x+20)-1}{\log_3(x+7)}\leqslant 0$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2024</div>
+            <button class="mark-btn" onclick="markSolved(event,'p3')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in(-7;\,-6)\cup\bigl[2;\,2{,}5\bigr)\cup\bigl(4;\,4{,}5\bigr]$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4 ══ -->
+    <div class="card-outer" data-type="ineq y2024" data-id="p4">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2024</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Замена $t=\lg x$</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 4</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\frac{3\lg^2 x-8}{\lg^2 x-4}\geqslant 2$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2024</div>
+            <button class="mark-btn" onclick="markSolved(event,'p4')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in(0;\,0{,}01)\cup\{1\}\cup(100;\,+\infty)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5 ══ -->
+    <div class="card-outer tall" data-type="eq y2023" data-id="p5">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-eq">Уравнение</span>
+            <span class="year-tag">ЕГЭ 2023</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 а) + б)</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 5</div>
+            <div class="task-intro">а) Решите уравнение:</div>
+            <div>$$\log_3(x^3+6x^2-3x-19)=\log_3(x+5)$$</div>
+            <div class="task-sub">б) Укажите корни из отрезка $\bigl[\log_{0{,}5}100;\;\log_{0{,}5}0{,}3\bigr]$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2023</div>
+            <button class="mark-btn" onclick="markSolved(event,'p5')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-part"><span class="a-pl">а)</span><span class="a-val">$x=\pm2$</span></div>
+              <div class="a-part"><span class="a-pl">б)</span><span class="a-val">$x=-2$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 6 ══ -->
+    <div class="card-outer" data-type="ineq y2023" data-id="p6">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2023</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Разность квадратов</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 6</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\log_3^2(x-4)-\log_3^2(x-6)\leqslant 0$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2023</div>
+            <button class="mark-btn" onclick="markSolved(event,'p6')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in\bigl(6;\;5+\sqrt{2}\,\bigr]$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 7 ══ -->
+    <div class="card-outer tall" data-type="ineq y2023" data-id="p7">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2023</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Основания 0,1 и 0,01</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 7</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\log_{0{,}1}(x^3-5x^2-25x+125)\leqslant\log_{0{,}01}(x-5)^4$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2023</div>
+            <button class="mark-btn" onclick="markSolved(event,'p7')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in[-4;\,5)\cup(5;\,+\infty)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 8 ══ -->
+    <div class="card-outer tall" data-type="ineq" data-id="p8">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2020</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Сумма + ОДЗ</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 8</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\log_5(3-x)(x^2+2)\geqslant\log_5(x^2-7x+12)+\log_5(5-x)$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2020</div>
+            <button class="mark-btn" onclick="markSolved(event,'p8')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in[2;\,3)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 9 ══ -->
+    <div class="card-outer tall" data-type="eq" data-id="p9">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-eq">Уравнение</span>
+            <span class="year-tag">ЕГЭ 2017</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+            <div class="hint-tag">📌 а) + б)</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 9</div>
+            <div class="task-intro">а) Решите уравнение:</div>
+            <div>$$\log_2(x^2-14x)=5$$</div>
+            <div class="task-sub">б) Укажите корни из отрезка $\bigl[\log_3 0{,}1;\;5\sqrt{10}\bigr]$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2017</div>
+            <button class="mark-btn" onclick="markSolved(event,'p9')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-part"><span class="a-pl">а)</span><span class="a-val">$x=-2,\quad x=16$</span></div>
+              <div class="a-part"><span class="a-pl">б)</span><span class="a-val">$x=-2$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 10 ══ -->
+    <div class="card-outer tall" data-type="ineq" data-id="p10">
+      <div class="solved-badge">✓</div>
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="c-left">
+            <span class="task-num type-ineq">Неравенство</span>
+            <span class="year-tag">ЕГЭ 2017</span>
+            <div class="difficulty"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+            <div class="hint-tag">📌 Замена $t=\log_2(\cdots)$</div>
+            <div class="flip-hint"><span class="flip-anim">↩</span> перевернуть</div>
+          </div>
+          <div class="c-right">
+            <div class="task-label">Задача 10</div>
+            <div class="task-intro">Решите неравенство:</div>
+            <div>$$\log_2^2(25-x^2)-7\log_2(25-x^2)+12\geqslant 0$$</div>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="c-left back-side">
+            <div class="back-label">Ответ</div>
+            <div class="back-num">ЕГЭ 2017</div>
+            <button class="mark-btn" onclick="markSolved(event,'p10')">✓ Решено</button>
+          </div>
+          <div class="c-right">
+            <div class="answer-box">
+              <div class="a-label">Ответ</div>
+              <div class="a-val">$x\in\!\bigl[-5;\,-\sqrt{17}\,\bigr]\cup[-3;\,3]\cup\bigl[\sqrt{17};\,5\bigr)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cards-list -->
+
+  <footer>
+    <strong>Школа Prepolyanski</strong> · Задание 15 ЕГЭ · Профильная математика<br>
+    ЕГЭ 2017–2025 · Профильная математика
+  </footer>
+
+</div>
+
+<a href="#" id="top-btn">↑</a>
+
+<script>
+  document.querySelectorAll('.card-outer').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.target.classList.contains('mark-btn')) return;
+      this.classList.toggle('flipped');
+    });
+  });
+
+  const KEY = 'solvedCards2';
+  const solved = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+
+  function applyBadges() {
+    solved.forEach(id => {
+      const c = document.querySelector(`.card-outer[data-id="${id}"]`);
+      if (!c) return;
+      c.classList.add('solved');
+      const btn = c.querySelector('.mark-btn');
+      if (btn) { btn.textContent = '✓ Решено!'; btn.classList.add('done'); }
+    });
+    updateProgress();
+  }
+
+  function markSolved(e, id) {
+    e.stopPropagation();
+    const card = document.querySelector(`.card-outer[data-id="${id}"]`);
+    if (solved.has(id)) {
+      solved.delete(id); card.classList.remove('solved');
+      e.target.textContent = '✓ Решено'; e.target.classList.remove('done');
+    } else {
+      solved.add(id); card.classList.add('solved');
+      e.target.textContent = '✓ Решено!'; e.target.classList.add('done');
+    }
+    localStorage.setItem(KEY, JSON.stringify([...solved]));
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.card-outer').length;
+    document.getElementById('solvedCount').textContent = solved.size;
+    document.getElementById('progressFill').style.width = (solved.size / total * 100) + '%';
+  }
+
+  applyBadges();
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const f = this.dataset.filter;
+      document.querySelectorAll('.card-outer').forEach(card => {
+        const t = card.dataset.type || '';
+        card.style.display = (f === 'all' || t.includes(f)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
