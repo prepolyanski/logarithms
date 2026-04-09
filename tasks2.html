@@ -727,7 +727,7 @@
       const f = this.dataset.filter;
       document.querySelectorAll('.card-outer').forEach(card => {
         const t = card.dataset.type || '';
-        card.style.display = (f === 'all' || t.includes(f)) ? '' : 'none';
+        card.style.display = (f === 'all' || t.split(' ').includes(f)) ? '' : 'none';
       });
     });
   });
